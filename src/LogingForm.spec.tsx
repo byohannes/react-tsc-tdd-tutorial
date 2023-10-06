@@ -52,9 +52,25 @@ describe("<LoginForm />", () => {
     expect(onPasswordChange).toHaveBeenCalledWith('WYAY123456')
   })
 
-  it.skip('should enable toggling remember me', async ()=> {
+  it('should enable toggling remember me', async ()=> {
+    const mockOnRememberChange = jest.fn() // mocking the function onRememberChange
+    const onRememberChange = mockOnRememberChange
+    renderLoginForm({ onRememberChange })
+
+    fireEvent.click( await screen.findByTestId('remember'))
+    expect(onRememberChange).toHaveBeenCalledWith(true)
+    expect (await screen.findByLabelText('Remember me?')).toBeTruthy()
   })
 
-  it.skip('should submit the form with username, password, and remember values', async ()=> {
+  it('should submit the form with username, password, and remember values', async ()=> {
+    const onSubmit = jest.fn() // mocking the function onSubmit
+    renderLoginForm({ onSubmit })
+
+    fireEvent.change( await screen.findByTestId('username'), { target: { value: 'Witt123@cap.com' }})
+    fireEvent.change( await screen.findByTestId('password'), { target: { value: 'Monday123' }})
+    fireEvent.click( await screen.findByTestId('remember'))
+    fireEvent.click( await screen.findByTestId('submit'))
+    expect(onSubmit).toHaveBeenCalled()
+
   })
 });
